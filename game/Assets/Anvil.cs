@@ -16,12 +16,8 @@ public class Anvil : UseObject
     override
    public void UseReady()
     {
+        Debug.Log("use subscribed");
         playerLook.ClickObject += Use;
-    }
-    override
-    public void Idle()
-    {
-        playerLook.ClickObject -= Use;
     }
     override
     public void UnUse()
@@ -29,10 +25,12 @@ public class Anvil : UseObject
         playerLook.ClickObject -= Use;
         playerLook.Esc -= UnUse;
         UseCanvas.SetActive(false);
+        Debug.Log("idled");
     }
     override
     public void Use()
     {
+        Debug.Log("used");
         playerLook.Esc += UnUse;
         UseCanvas.SetActive(true);
         GameObject[] itemSlots = new GameObject[player.inventorySize];

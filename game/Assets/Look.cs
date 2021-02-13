@@ -24,6 +24,7 @@ public class Look : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        esced = false;
         if (Input.GetKeyDown(KeyCode.E))
         {
             player.pressing = true;
@@ -32,18 +33,11 @@ public class Look : MonoBehaviour
             Esc?.Invoke();
             Cursor.lockState = CursorLockMode.Locked;
             player.windowOpen = false;
+            Debug.Log("windows closed registered");
             esced = true;
         }
         if (lookObject != null)
         {
-            if (lookObject.tag == "use")
-            {
-                UseObject usable = lookObject.GetComponent<UseObject>();
-                if (!esced) usable.UseReady();
-                ready = true;
-                esced = false;
-            }
-
             if (lookObject.tag == "pickup")
             {
                 Item pickable = lookObject.GetComponent<Item>();
@@ -59,7 +53,10 @@ public class Look : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && !esced)
         {
             if (player.windowOpen == false)
+            {
                 ClickObject?.Invoke();
+                Debug.Log("invoked clikObject");
+            }
         }
     }
 
@@ -77,24 +74,20 @@ public class Look : MonoBehaviour
         if (hit.distance <= 5 && (hit.transform.tag == "pickup" || hit.transform.tag == "use"))
         {
             Debug.DrawRay(transform.position, transform.forward * 5, Color.green);
-            Debug.Log("Hit" + hit.transform.name);
+            Debug.Log("Hit " + hit.transform.name);
             if (lookObject != hit.transform.gameObject)
             {
-                ready = false;
-                if (lookObject != null)
-                {
-                    if (lookObject.tag == "use")
-                    {
-                        UseObject usable = lookObject.GetComponent<UseObject>();
-                        usable.UnUse();
-                    }
-                    lookObject.GetComponent<Renderer>().material = firstmaterial;
-                }
+                ResetLookedObject();
                 lookObject = hit.transform.gameObject;
                 Renderer rend = lookObject.GetComponent<Renderer>();
                 firstmaterial = rend.material;
                 Material blue = GameObject.FindGameObjectsWithTag("material")[0].GetComponent<Renderer>().material;
                 rend.material = blue;
+                Debug.Log("changed to " + hit.transform.name);
+                if (lookObject.tag == "use")
+                {
+                    lookObject.GetComponent<UseObject>().UseReady();
+                }
             }
         }
         else
