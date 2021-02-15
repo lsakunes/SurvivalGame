@@ -14,7 +14,6 @@ public class Look : MonoBehaviour
     Material firstmaterial;
     Player player;
     bool esced;
-    bool ready;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,14 +26,23 @@ public class Look : MonoBehaviour
         esced = false;
         if (Input.GetKeyDown(KeyCode.E))
         {
-            player.pressing = true;
+            Debug.Log("registered E");
             player.playerScript.controllerPauseState = false;
             player.PressE();
-            Esc?.Invoke();
-            Cursor.lockState = CursorLockMode.Locked;
-            player.windowOpen = false;
-            Debug.Log("windows closed registered");
-            esced = true;
+
+            player.pressing = true;
+            if (player.windowOpen)
+            {
+                Esc?.Invoke();
+                Cursor.lockState = CursorLockMode.Locked;
+                player.windowOpen = false;
+                Debug.Log("windows closed registered");
+                esced = true;
+            }
+        }
+        else
+        {
+            player.pressing = false;
         }
         if (lookObject != null)
         {

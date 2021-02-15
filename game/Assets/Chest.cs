@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CraftingTable : UseObject
+public class Chest: UseObject
 {
     public GameObject UseCanvas;
     Player player;

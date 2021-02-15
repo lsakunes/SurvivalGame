@@ -34,23 +34,29 @@ public class Player : MonoBehaviour
     }
 
     // Update is called once per frame
-    public void PressE()
+    public bool PressE()
     {
+        Debug.Log("pressed E");
         if (Input.GetKey(KeyCode.E) && !inventoryOn && !pressing && playerScript.IsGrounded && !windowOpen)
         {
+            Debug.Log("opened window");
             inventoryUI.SetActive(true);
             playerScript.controllerPauseState = true;
             inventoryOn = true;
             windowOpen = true;
+            return true;
         }
         else if (Input.GetKey(KeyCode.E) && inventoryOn && !pressing)
         {
+            Debug.Log("closed window");
             inventoryUI.SetActive(false);
             playerScript.controllerPauseState = false;
             inventoryOn = false;
             Cursor.lockState = CursorLockMode.Locked;
             windowOpen = false;
+            return false;
         }
+        return false;
     }
     void Update()
     {
