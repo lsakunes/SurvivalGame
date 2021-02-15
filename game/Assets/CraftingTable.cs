@@ -7,6 +7,7 @@ public class CraftingTable : UseObject
     public GameObject UseCanvas;
     Player player;
     Look playerLook;
+    public GameObject itemSlotParent;
     private void Start()
     {
         playerLook = FindObjectOfType<Look>();
@@ -35,10 +36,12 @@ public class CraftingTable : UseObject
         UseCanvas.SetActive(true);
         GameObject[] itemSlots = new GameObject[player.inventorySize];
         int i = 0;
-        foreach (Transform slotTransform in player.itemSlotParent.transform)
+        foreach (Transform slotTransform in itemSlotParent.transform)
         {
             itemSlots[i] = slotTransform.gameObject;
             i++;
+            if (i >= player.inventorySize)
+                break;
         }
         player.playerScript.controllerPauseState = true;
         Cursor.lockState = CursorLockMode.Confined;

@@ -58,7 +58,7 @@ public class Look : MonoBehaviour
 
         }
 
-        if (Input.GetMouseButtonDown(0) && !esced)
+        if (Input.GetMouseButtonDown(0) && !esced  && player.playerScript.IsGrounded)
         {
             if (player.windowOpen == false)
             {
