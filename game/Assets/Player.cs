@@ -21,7 +21,6 @@ public class Player : MonoBehaviour
     public int slotHeight;
     public GameObject itemSlotParent;
     public bool windowOpen;
-    // Start is called before the first frame update
     private void Awake()
     {
         ItemImages.createImages();
@@ -62,6 +61,7 @@ public class Player : MonoBehaviour
     {
         if (inventoryOn)
         {
+            windowOpen = true;
             GameObject[] itemSlots = new GameObject[inventorySize];
             int i = 0;
             foreach (Transform slotTransform in itemSlotParent.transform)
@@ -81,6 +81,19 @@ public class Player : MonoBehaviour
             }
 
 
+        }
+        if (windowOpen)
+        {
+            playerScript.controllerPauseState = true;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+
+            playerScript.controllerPauseState = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
     }
 
