@@ -11,6 +11,7 @@ TagManager:
   - items
   - images
   - use
+  - clearOnUse
   layers:
   - Default
   - TransparentFX

@@ -17,9 +17,16 @@ public class WindowHandler : MonoBehaviour
             second = clicked;
         if (second != null)
         {
+            if (second == selected)
+            {
+                second = null;
+                selected = null;
+                return;
+            }
             Transform storedImage = selected.transform.GetChild(0);
             selected.transform.DetachChildren();
             second.transform.GetChild(0).parent = selected.transform;
+            second.transform.DetachChildren();
             storedImage.parent = second.transform;
             selected.transform.GetChild(0).position = selected.transform.position;
             second.transform.GetChild(0).position = second.transform.position;

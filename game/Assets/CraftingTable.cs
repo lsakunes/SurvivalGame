@@ -8,6 +8,7 @@ public class CraftingTable : UseObject
     Player player;
     Look playerLook;
     public GameObject itemSlotParent;
+    public GameObject empty;
     private void Start()
     {
         playerLook = FindObjectOfType<Look>();
@@ -31,6 +32,17 @@ public class CraftingTable : UseObject
     override
     public void Use()
     {
+        foreach (Transform x in itemSlotParent.transform)
+        {
+            if (x.CompareTag("clearOnUse"))
+            {
+                x.DetachChildren();
+                GameObject emptyIcon = Instantiate(empty);
+                emptyIcon.transform.parent = x;
+                emptyIcon.transform.position = x.transform.position;
+                emptyIcon.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+            }
+        }
         Debug.Log("used");
         playerLook.Esc += UnUse;
         UseCanvas.SetActive(true);
