@@ -91,13 +91,15 @@ public class CraftingTable : UseObject
 
     public void updateDrop()
     {
-        bool same = true;
         int creatablesNum = 0;
         creatables = new Item[20];
+        bool contin = false;
         foreach (Item x in Item.items)
         {
             if (x.ingredients.Length == 0)
-                break;
+                continue;
+            if ((x.creationTool == null && craftingStorage[craftingStorage.Length - 1] != null) || (x.creationTool != null && craftingStorage[craftingStorage.Length - 1] == null))
+                continue;
             if (x.creationDevice == "craftingTable" && x.creationTool.name == craftingStorage[craftingStorage.Length - 1].name)
             {
                 int[] ingredientsEnum = new int[x.ingredients.Length];
@@ -112,17 +114,24 @@ public class CraftingTable : UseObject
                 z = 0;
                 foreach (Item y in craftingStorage)
                 {
+                    if (y == craftingStorage[craftingStorage.Length - 1] && y != null)
+                        continue;
                     if (y != null)
                     {
+                        if (z >= x.ingredients.Length)
+                        {
+                            contin = true;
+                            break;
+                        }
                         craftingStorageEnum[z] = (int)y.itemEnum;
                         z++;
                     }
                 }
+                if (contin)
+                    continue;
 
                 if (z > x.ingredients.Length)
-                {
-                    same = false;
-                }
+                    continue;
 
                 Array.Sort(craftingStorageEnum);
                 Array.Sort(ingredientsEnum);
@@ -132,16 +141,17 @@ public class CraftingTable : UseObject
                 {
                     if (y != ingredientsEnum[z])
                     {
-                        same = false;
+                        contin = true;
+                        break;
                     }
                     z++;
                 }
 
-                if (same)
-                {
-                    creatables[creatablesNum] = x;
-                    creatablesNum++;
-                }
+                if (contin)
+                    continue;
+
+                creatables[creatablesNum] = x;
+                creatablesNum++;
             }
         }
 
@@ -159,19 +169,14 @@ public class CraftingTable : UseObject
 
         Dropdown dropdownBar = dropdown.GetComponent<Dropdown>();
         dropdownBar.ClearOptions();
-        dropdownBar.AddOptions(new List<Dropdown.OptionData>(creatables.Length));
+        List < Dropdown.OptionData > dropdownList = new List<Dropdown.OptionData>();
         int i = 0;
-        foreach (Dropdown.OptionData x in dropdownBar.options)
+        foreach (Item x in creatables)
         {
-            if (creatables[i] == null)
-            {
-                List<Dropdown.OptionData> savedOptions = dropdownBar.options.GetRange(0, i);
-                dropdownBar.ClearOptions();
-                dropdownBar.AddOptions(savedOptions);
-                break;
-            }
-            x.text = creatables[i].name;
+            dropdownList.Add(new Dropdown.OptionData(creatables[i].name));
+            i++;
         }
+            dropdownBar.AddOptions(dropdownList);
     }
     public void redraw()
     {

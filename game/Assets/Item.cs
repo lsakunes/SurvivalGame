@@ -6,7 +6,8 @@ public enum ItemTypes
 {
 	stick,
 	rock,
-	mushroom
+	mushroom,
+	sharpRock
 }
 public abstract class Item
 {
@@ -21,7 +22,7 @@ public abstract class Item
 	public int hunger;
 	public ItemTypes itemEnum;
 	public static Item[] items;
-    public static int itemNum = 3;
+    public static int itemNum = 4;
 	// forward attack, downward attack, sideways 
 	public int[] attacks;
 
@@ -30,11 +31,12 @@ public abstract class Item
 	public abstract Item Create();
 
 	public static void InitializeItems()
-    {
+	{
 		items = new Item[itemNum];
 		items[(int)ItemTypes.stick] = new Stick().Create();
 		items[(int)ItemTypes.rock] = new Rock().Create();
 		items[(int)ItemTypes.mushroom] = new Mushroom().Create();
+		items[(int)ItemTypes.sharpRock] = new SharpRock().Create();
 
 	}
 	

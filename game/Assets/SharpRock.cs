@@ -7,8 +7,9 @@ public class SharpRock : Item
 	public Item Create()
 	{
 		name = "sharp rock";
-		ingredients = new []{new Rock()};
+		ingredients = new []{new Rock().Create()};
 		creationDevice = "craftingTable";
+		creationTool = new Rock().Create();
 		setImage(ItemImages.images.rockImg);
 		durability = 50;
 		holdable = true;
