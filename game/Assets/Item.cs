@@ -8,20 +8,36 @@ public enum ItemTypes
 	rock,
 	mushroom
 }
-public abstract class Item : MonoBehaviour
+public abstract class Item
 {
-	public new string name;
-	public ItemTypes[] ingredients;
-	public UseObject[] creationTools;
-	public UseObject creationDevice;
-	private Sprite image;
+	public string name;
+	public Item[] ingredients;
+    public Item creationTool;
+	public string creationDevice;
+	public Sprite image;
 	public int durability;
 	public bool holdable;
 	public bool edible;
 	public int hunger;
 	public ItemTypes itemEnum;
-	// forward attack, downward attack, sideways attack
+	public static Item[] items;
+    public static int itemNum = 3;
+	// forward attack, downward attack, sideways 
 	public int[] attacks;
+
+	public abstract Item newObject();
+
+	public abstract Item Create();
+
+	public static void InitializeItems()
+    {
+		items = new Item[itemNum];
+		items[(int)ItemTypes.stick] = new Stick().Create();
+		items[(int)ItemTypes.rock] = new Rock().Create();
+		items[(int)ItemTypes.mushroom] = new Mushroom().Create();
+
+	}
+	
 	public Sprite getImage()
     {
 		return image;
@@ -30,6 +46,30 @@ public abstract class Item : MonoBehaviour
     {
 		this.image = image;
     }
+
+	public static Item GetItemByIcon(Sprite img)
+    {
+		foreach (Item x in items)
+		{
+			if (img.texture.name == x.image.texture.name)
+			{
+				return x.newObject().Create();
+			}
+		}
+		return null;
+    }
+
+	public static Item GetItemByTag(string tag)
+    { 
+		foreach (Item x in items)
+		{
+			if (tag == x.name)
+			{
+				return x.newObject().Create();
+			}
+		}
+		return null;
+	}
 }
 
 

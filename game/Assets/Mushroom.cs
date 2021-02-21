@@ -2,11 +2,11 @@
 
 public class Mushroom : Item
 {
-	public void Start()
+	override
+	public Item Create()
 	{
 		name = "mushroom";
-		ingredients = new ItemTypes[0];
-		creationTools = new UseObject[0];
+		ingredients = new Item[0];
 		setImage(ItemImages.images.mushroomImg);
 		durability = 0;
 		holdable = false;
@@ -14,5 +14,13 @@ public class Mushroom : Item
 		itemEnum = ItemTypes.mushroom;
 		edible = true;
 		hunger = 1;
+
+		return this;
+	}
+
+	override
+	public Item newObject()
+	{
+		return new Mushroom();
 	}
 }

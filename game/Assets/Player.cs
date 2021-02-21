@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Player : MonoBehaviour
 {
@@ -21,14 +22,19 @@ public class Player : MonoBehaviour
     public int slotHeight;
     public GameObject itemSlotParent;
     public bool windowOpen;
+    GameObject[] itemSlots;
     private void Awake()
     {
         ItemImages.createImages();
     }
     void Start()
     {
+        Item.InitializeItems();
         playerScript = player.GetComponent<FirstPersonAIO>();
         inventoryUI.SetActive(false);
+        inventorySize = (from Transform x in itemSlotParent.transform
+                         where x.CompareTag("inventorySlot")
+                         select x).Count();
         inventory = new Item[inventorySize];
     }
 
@@ -36,7 +42,7 @@ public class Player : MonoBehaviour
     public bool PressE()
     {
         Debug.Log("pressed E");
-        if (Input.GetKey(KeyCode.E) && !inventoryOn && !pressing && playerScript.IsGrounded && !windowOpen)
+        if (!inventoryOn && !pressing && playerScript.IsGrounded && !windowOpen)
         {
             Debug.Log("opened window");
             inventoryUI.SetActive(true);
@@ -45,7 +51,7 @@ public class Player : MonoBehaviour
             windowOpen = true;
             return true;
         }
-        else if (Input.GetKey(KeyCode.E) && inventoryOn && !pressing)
+        else if (inventoryOn && !pressing)
         {
             Debug.Log("closed window");
             inventoryUI.SetActive(false);
@@ -62,23 +68,21 @@ public class Player : MonoBehaviour
         if (inventoryOn)
         {
             windowOpen = true;
-            GameObject[] itemSlots = new GameObject[inventorySize];
+            itemSlots = new GameObject[inventorySize];
             int i = 0;
             foreach (Transform slotTransform in itemSlotParent.transform)
             {
                 itemSlots[i] = slotTransform.gameObject;
                 i++;
+                if (i >= inventorySize)
+                {
+                    break;
+                }
             }
             playerScript.controllerPauseState = true;
             Cursor.lockState = CursorLockMode.None;
-            i = 0;
 
-            foreach (Item x in inventory)
-            {
-                if (x != null)
-                    itemSlots[i].transform.GetChild(0).GetComponent<UnityEngine.UI.Image>().sprite = x.getImage();
-                i++;
-            }
+            redraw();
 
 
         }
@@ -101,15 +105,38 @@ public class Player : MonoBehaviour
     {
         Item item = inputItem;
         inventorySlot = 0;
+
+        if (item == null)
+            return;
+
         while (inventory[inventorySlot] != null)
         {
             inventorySlot++;
+            if (inventorySlot == inventory.Length)
+            {
+                return;
+            }
         }
+
         inventory[inventorySlot] = item;
     }
 
     public bool Full()
     {
         return inventorySlot >= inventorySize;
+    }
+
+    public void redraw()
+    {
+        int i = 0;
+
+        foreach (Item x in inventory)
+        {
+            if (x != null)
+                itemSlots[i].transform.GetChild(0).GetComponent<UnityEngine.UI.Image>().sprite = x.getImage();
+            else
+                itemSlots[i].transform.GetChild(0).GetComponent<UnityEngine.UI.Image>().sprite = FindObjectOfType<WindowHandler>().emptyImg;
+            i++;
+        }
     }
 }

@@ -12,6 +12,11 @@ TagManager:
   - images
   - use
   - clearOnUse
+  - trash
+  - chestSlot
+  - inventorySlot
+  - useCanvas
+  - craftingSlot
   layers:
   - Default
   - TransparentFX

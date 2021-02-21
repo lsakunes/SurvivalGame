@@ -6,7 +6,10 @@ public class WindowHandler : MonoBehaviour
 {
     public GameObject selected;
     public GameObject second;
-
+    public Sprite emptyImg;
+    Player player;
+    Chest chest;
+    CraftingTable table;
 
     public void OnClick(GameObject clicked)
     {
@@ -15,6 +18,21 @@ public class WindowHandler : MonoBehaviour
 
         else
             second = clicked;
+        Transform canvas = selected.transform;
+        while (canvas.parent != null)
+        {
+            if (canvas.CompareTag("useCanvas"))
+            {
+                break;
+            }
+            canvas = canvas.parent;
+        }
+        if (selected.CompareTag("trash"))
+        {
+            selected = null;
+            second = null;
+            return;
+        }
         if (second != null)
         {
             if (second == selected)
@@ -23,29 +41,82 @@ public class WindowHandler : MonoBehaviour
                 selected = null;
                 return;
             }
-            Transform storedImage = selected.transform.GetChild(0);
-            selected.transform.DetachChildren();
-            second.transform.GetChild(0).parent = selected.transform;
-            second.transform.DetachChildren();
-            storedImage.parent = second.transform;
-            selected.transform.GetChild(0).position = selected.transform.position;
-            second.transform.GetChild(0).position = second.transform.position;
-            if (selected.transform.parent.parent.parent.parent.CompareTag("inventory"))
+            if (second.CompareTag("trash"))
             {
-                Player player = FindObjectOfType<Player>();
+                player.inventory[selected.transform.GetSiblingIndex()] = null;
+                selected = null;
+                second = null;
+                return;
+            }
+
+            //chest
+            if (selected.CompareTag("chestSlot"))
+            {
+                if (second.CompareTag("inventorySlot"))
+                {
+                    Item savedItem = chest.chestStorage[selected.transform.GetSiblingIndex() - player.inventorySize];
+                    chest.chestStorage[selected.transform.GetSiblingIndex() - player.inventorySize] = player.inventory[second.transform.GetSiblingIndex()];
+                    player.inventory[second.transform.GetSiblingIndex()] = savedItem;
+                }
+                if (second.CompareTag("chestSlot"))
+                {
+                    Item savedItem = chest.chestStorage[selected.transform.GetSiblingIndex() - player.inventorySize];
+                    chest.chestStorage[selected.transform.GetSiblingIndex() - player.inventorySize] = chest.chestStorage[second.transform.GetSiblingIndex() - player.inventorySize];
+                    chest.chestStorage[second.transform.GetSiblingIndex() - player.inventorySize] = savedItem;
+                }
+            }
+            if (selected.CompareTag("inventorySlot") && second.CompareTag("chestSlot"))
+            {
+                Item savedItem = player.inventory[selected.transform.GetSiblingIndex()];
+                player.inventory[selected.transform.GetSiblingIndex()] = chest.chestStorage[second.transform.GetSiblingIndex() - player.inventorySize];
+                chest.chestStorage[second.transform.GetSiblingIndex() - player.inventorySize] = savedItem;
+            }
+
+            //Crafting Table
+            if (selected.CompareTag("craftingSlot"))
+            {
+                if (second.CompareTag("inventorySlot"))
+                {
+                    Item savedItem = table.craftingStorage[selected.transform.GetSiblingIndex() - player.inventorySize];
+                    table.craftingStorage[selected.transform.GetSiblingIndex() - player.inventorySize] = player.inventory[second.transform.GetSiblingIndex()];
+                    player.inventory[second.transform.GetSiblingIndex()] = savedItem;
+                }
+                if (second.CompareTag("craftingSlot"))
+                {
+                    Item savedItem = table.craftingStorage[selected.transform.GetSiblingIndex() - player.inventorySize];
+                    table.craftingStorage[selected.transform.GetSiblingIndex() - player.inventorySize] = table.craftingStorage[second.transform.GetSiblingIndex() - player.inventorySize];
+                    table.craftingStorage[second.transform.GetSiblingIndex() - player.inventorySize] = savedItem;
+                }
+            }
+            if (selected.CompareTag("inventorySlot") && second.CompareTag("craftingSlot"))
+            {
+                Item savedItem = player.inventory[selected.transform.GetSiblingIndex()];
+                player.inventory[selected.transform.GetSiblingIndex()] = table.craftingStorage[second.transform.GetSiblingIndex() - player.inventorySize];
+                table.craftingStorage[second.transform.GetSiblingIndex() - player.inventorySize] = savedItem;
+            }
+
+            if (selected.CompareTag("inventorySlot") && second.CompareTag("inventorySlot"))
+            {
+
                 Item savedItem = player.inventory[selected.transform.GetSiblingIndex()];
                 player.inventory[selected.transform.GetSiblingIndex()] = player.inventory[second.transform.GetSiblingIndex()];
                 player.inventory[second.transform.GetSiblingIndex()] = savedItem;
 
             }
+            if (second != null)
+                canvas.GetComponent<UseCanvas>().redraw = true;
             selected = null;
             second = null;
         }
+
     }
 
     public void Start()
     {
+        player = FindObjectOfType<Player>();
         FindObjectOfType<Look>().Esc += ClearSelected;
+        chest = FindObjectOfType<Chest>();
+        table = FindObjectOfType<CraftingTable>();
     }
     public void ClearSelected()
     {

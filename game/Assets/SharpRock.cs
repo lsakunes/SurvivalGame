@@ -1,12 +1,14 @@
 ﻿using System;
+using UnityEngine;
 
-public class Rock : Item
+public class SharpRock : Item
 {
 	override
 	public Item Create()
 	{
-		name = "rock";
-		ingredients = new Item[0];
+		name = "sharp rock";
+		ingredients = new []{new Rock()};
+		creationDevice = "craftingTable";
 		setImage(ItemImages.images.rockImg);
 		durability = 50;
 		holdable = true;
@@ -20,7 +22,7 @@ public class Rock : Item
 
 	override
 	public Item newObject()
-    {
+	{
 		return new Rock();
-    } 
+	}
 }

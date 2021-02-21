@@ -4,15 +4,36 @@ using UnityEngine;
 
 public class Chest : UseObject
 {
-    public GameObject UseCanvas;
+    public GameObject useCanvas;
     Player player;
     Look playerLook;
     public GameObject itemSlotParent;
+    public int chestSize;
+    public Item[] chestStorage;
+    GameObject[] inventoryItemSlots;
+    GameObject[] chestItemSlots;
     private void Start()
     {
         playerLook = FindObjectOfType<Look>();
         player = FindObjectOfType<Player>();
-        UseCanvas.SetActive(false);
+        useCanvas.SetActive(false);
+        chestSize = 0;
+        foreach (Transform x in itemSlotParent.transform)
+        {
+            if (x.CompareTag("chestSlot"))
+            {
+                chestSize++;
+            }
+        }
+
+        chestStorage = new Item[chestSize];
+    }
+    public void Update()
+    {
+        if (useCanvas.GetComponent<UseCanvas>().redraw)
+        {
+            redraw();
+        }
     }
     override
    public void UseReady()
@@ -25,7 +46,7 @@ public class Chest : UseObject
     {
         playerLook.ClickObject -= Use;
         playerLook.Esc -= UnUse;
-        UseCanvas.SetActive(false);
+        useCanvas.SetActive(false);
         Debug.Log("idled");
     }
     override
@@ -33,24 +54,51 @@ public class Chest : UseObject
     {
         Debug.Log("used");
         playerLook.Esc += UnUse;
-        UseCanvas.SetActive(true);
-        GameObject[] itemSlots = new GameObject[player.inventorySize];
+        useCanvas.SetActive(true);
+        player.windowOpen = true;
+        inventoryItemSlots = new GameObject[player.inventorySize];
+        chestItemSlots = new GameObject[chestSize];
         int i = 0;
         foreach (Transform slotTransform in itemSlotParent.transform)
         {
-            itemSlots[i] = slotTransform.gameObject;
-            i++;
-            if (i >= player.inventorySize)
-                break;
+            if (slotTransform.CompareTag("inventorySlot") || slotTransform.CompareTag("chestSlot"))
+            {
+                if (i < player.inventorySize)
+                    inventoryItemSlots[i] = slotTransform.gameObject;
+                else
+                    chestItemSlots[i - player.inventorySize] = slotTransform.gameObject;
+                i++;
+            }
         }
-        player.playerScript.controllerPauseState = true;
-        Cursor.lockState = CursorLockMode.Confined;
-        i = 0;
-        player.windowOpen = true;
+
+        redraw();
+
+
+
+
+
+
+
+    }
+
+    public void redraw()
+    {
+        int i = 0;
         foreach (Item x in player.inventory)
         {
             if (x != null)
-                itemSlots[i].transform.GetChild(0).GetComponent<UnityEngine.UI.Image>().sprite = x.getImage();
+                inventoryItemSlots[i].transform.GetChild(0).GetComponent<UnityEngine.UI.Image>().sprite = x.getImage();
+            else
+                inventoryItemSlots[i].transform.GetChild(0).GetComponent<UnityEngine.UI.Image>().sprite = FindObjectOfType<WindowHandler>().emptyImg;
+            i++;
+        }
+        i = 0;
+        foreach (Item x in chestStorage)
+        {
+            if (x != null)
+                chestItemSlots[i].transform.GetChild(0).GetComponent<UnityEngine.UI.Image>().sprite = x.getImage();
+            else
+                chestItemSlots[i].transform.GetChild(0).GetComponent<UnityEngine.UI.Image>().sprite = FindObjectOfType<WindowHandler>().emptyImg;
             i++;
         }
     }

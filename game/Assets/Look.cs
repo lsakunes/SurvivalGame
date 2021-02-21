@@ -26,19 +26,7 @@ public class Look : MonoBehaviour
         esced = false;
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log("registered E");
-            player.playerScript.controllerPauseState = false;
-            player.PressE();
-
-            player.pressing = true;
-            if (player.windowOpen)
-            {
-                Esc?.Invoke();
-                Cursor.lockState = CursorLockMode.Locked;
-                player.windowOpen = false;
-                Debug.Log("windows closed registered");
-                esced = true;
-            }
+            PressE();
         }
         else
         {
@@ -48,7 +36,7 @@ public class Look : MonoBehaviour
         {
             if (lookObject.tag == "pickup")
             {
-                Item pickable = lookObject.GetComponent<Item>();
+                Item pickable = Item.GetItemByTag(lookObject.GetComponent<pickupObject>().name);
                 if (Input.GetMouseButtonDown(0) && !player.Full())
                 {
                     player.Add(pickable);
@@ -118,5 +106,22 @@ public class Look : MonoBehaviour
             lookObject.GetComponent<Renderer>().material = firstmaterial;
         }
         lookObject = null;
+    }
+
+    public void PressE()
+    {
+        Debug.Log("registered E");
+        player.playerScript.controllerPauseState = false;
+        player.PressE();
+
+        player.pressing = true;
+        if (player.windowOpen)
+        {
+            Esc?.Invoke();
+            Cursor.lockState = CursorLockMode.Locked;
+            player.windowOpen = false;
+            Debug.Log("windows closed registered");
+            esced = true;
+        }
     }
 }

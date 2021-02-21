@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-6572539135028809579
+--- !u!114 &6022575694545662770
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9,20 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5572074502535641084}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 312555a6943760344b190bccdcf03ab6, type: 3}
+  m_Script: {fileID: 11500000, guid: cb5175b4da13a144f8fb843c07e4c0f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   name: mushroom
-  ingredients: 
-  creationTools: []
-  creationDevice: {fileID: 0}
-  image: {fileID: 0}
-  durability: 0
-  holdable: 0
-  edible: 1
-  hunger: 1
-  itemEnum: 2
-  attacks: 000000000000000000000000
 --- !u!1001 &6171098330696083093
 PrefabInstance:
   m_ObjectHideFlags: 0

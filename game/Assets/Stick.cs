@@ -2,11 +2,11 @@
 
 public class Stick : Item
 {
-	public void Start()
+	override
+	public Item Create()
 	{
 		name = "stick";
-		ingredients = new ItemTypes[0];
-		creationTools = new UseObject[0];
+		ingredients = new Item[0];
         setImage(ItemImages.images.stickImg);
 		durability = 10;
 		holdable = true;
@@ -14,5 +14,13 @@ public class Stick : Item
 		itemEnum = ItemTypes.stick;
 		edible = false;
 		hunger = 0;
+
+		return this;
 	}
+
+	override
+	public Item newObject()
+    {
+		return new Stick().Create();
+    }
 }
