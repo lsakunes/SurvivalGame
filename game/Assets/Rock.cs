@@ -8,7 +8,7 @@ public class Rock : Item
 		name = "rock";
 		ingredients = new Item[0];
 		setImage(ItemImages.images.rockImg);
-		durability = 50;
+		durability = 200;
 		holdable = true;
 		attacks = new int[] { 0, 2, 2 };
 		itemEnum = ItemTypes.rock;

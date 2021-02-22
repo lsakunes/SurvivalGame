@@ -14,6 +14,7 @@ public class Look : MonoBehaviour
     Material firstmaterial;
     Player player;
     bool esced;
+    public bool debugging = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +24,25 @@ public class Look : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (debugging)
+        {
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                player.Add(new Rock().Create());
+            }
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                player.Add(new Stick().Create());
+            }
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                player.Add(new Mushroom().Create());
+            }
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                player.Add(new SharpRock().Create());
+            }
+        }
         esced = false;
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -51,7 +71,6 @@ public class Look : MonoBehaviour
             if (player.windowOpen == false)
             {
                 ClickObject?.Invoke();
-                Debug.Log("invoked clikObject");
             }
         }
     }
@@ -61,7 +80,6 @@ public class Look : MonoBehaviour
         RaycastHit hit;
         if (!Physics.Raycast(transform.position, transform.forward, out hit))
         {
-            Debug.Log("No hit");
             ResetLookedObject();
             return;
         }
@@ -70,7 +88,6 @@ public class Look : MonoBehaviour
         if (hit.distance <= 5 && (hit.transform.tag == "pickup" || hit.transform.tag == "use"))
         {
             Debug.DrawRay(transform.position, transform.forward * 5, Color.green);
-            Debug.Log("Hit " + hit.transform.name);
             if (lookObject != hit.transform.gameObject)
             {
                 ResetLookedObject();
@@ -79,7 +96,6 @@ public class Look : MonoBehaviour
                 firstmaterial = rend.material;
                 Material blue = GameObject.FindGameObjectsWithTag("material")[0].GetComponent<Renderer>().material;
                 rend.material = blue;
-                Debug.Log("changed to " + hit.transform.name);
                 if (lookObject.tag == "use")
                 {
                     lookObject.GetComponent<UseObject>().UseReady();
@@ -96,12 +112,10 @@ public class Look : MonoBehaviour
     {
         if (lookObject != null)
         {
-            Debug.Log("Reseting lookObject: " + lookObject.transform.name);
             if (lookObject.tag == "use")
             {
                 UseObject usable = lookObject.GetComponent<UseObject>();
                 usable.UnUse();
-                Debug.Log("Use object Idle");
             }
             lookObject.GetComponent<Renderer>().material = firstmaterial;
         }
@@ -110,7 +124,6 @@ public class Look : MonoBehaviour
 
     public void PressE()
     {
-        Debug.Log("registered E");
         player.playerScript.controllerPauseState = false;
         player.PressE();
 
@@ -120,7 +133,6 @@ public class Look : MonoBehaviour
             Esc?.Invoke();
             Cursor.lockState = CursorLockMode.Locked;
             player.windowOpen = false;
-            Debug.Log("windows closed registered");
             esced = true;
         }
     }

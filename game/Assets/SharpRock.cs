@@ -6,15 +6,15 @@ public class SharpRock : Item
 	override
 	public Item Create()
 	{
-		name = "sharp rock";
+		name = "sharpRock";
 		ingredients = new []{new Rock().Create()};
 		creationDevice = "craftingTable";
 		creationTool = new Rock().Create();
-		setImage(ItemImages.images.rockImg);
+		setImage(ItemImages.images.sharpRockImg);
 		durability = 50;
 		holdable = true;
-		attacks = new int[] { 0, 2, 2 };
-		itemEnum = ItemTypes.rock;
+		attacks = new int[] { 1, 3, 3 };
+		itemEnum = ItemTypes.sharpRock;
 		edible = false;
 		hunger = 0;
 
@@ -24,6 +24,6 @@ public class SharpRock : Item
 	override
 	public Item newObject()
 	{
-		return new Rock();
+		return new SharpRock();
 	}
 }

@@ -41,10 +41,8 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     public bool PressE()
     {
-        Debug.Log("pressed E");
         if (!inventoryOn && !pressing && playerScript.IsGrounded && !windowOpen)
         {
-            Debug.Log("opened window");
             inventoryUI.SetActive(true);
             playerScript.controllerPauseState = true;
             inventoryOn = true;
@@ -53,7 +51,6 @@ public class Player : MonoBehaviour
         }
         else if (inventoryOn && !pressing)
         {
-            Debug.Log("closed window");
             inventoryUI.SetActive(false);
             playerScript.controllerPauseState = false;
             inventoryOn = false;

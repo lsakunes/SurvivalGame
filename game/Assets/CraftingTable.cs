@@ -4,34 +4,37 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class CraftingTable : UseObject
 {
     public GameObject useCanvas;
     Player player;
     Look playerLook;
     public GameObject itemSlotParent;
-    public int chestSize;
+    public int storageSize;
     public Item[] craftingStorage;
     GameObject[] inventoryItemSlots;
     GameObject[] craftingItemSlots;
     public GameObject dropdown;
     public Item[] creatables;
+    public Item creating;
+    int chooseNum;
     private void Start()
     {
         playerLook = FindObjectOfType<Look>();
         player = FindObjectOfType<Player>();
         useCanvas.SetActive(false);
-        chestSize = 0;
+        storageSize = 0;
         creatables = new Item[20];
         foreach (Transform x in itemSlotParent.transform)
         {
             if (x.CompareTag("craftingSlot"))
             {
-                chestSize++;
+                storageSize++;
             }
         }
 
-        craftingStorage = new Item[chestSize];
+        craftingStorage = new Item[storageSize];
     }
     public void Update()
     {
@@ -45,7 +48,6 @@ public class CraftingTable : UseObject
     override
    public void UseReady()
     {
-        Debug.Log("use subscribed");
         playerLook.ClickObject += Use;
     }
     override
@@ -58,7 +60,6 @@ public class CraftingTable : UseObject
         playerLook.ClickObject -= Use;
         playerLook.Esc -= UnUse;
         useCanvas.SetActive(false);
-        Debug.Log("idled");
         for (int y = 0; y < craftingStorage.Length; y++)
         {
             craftingStorage[y] = null;
@@ -67,13 +68,11 @@ public class CraftingTable : UseObject
     override
     public void Use()
     {
-
-        Debug.Log("used");
         playerLook.Esc += UnUse;
         useCanvas.SetActive(true);
         player.windowOpen = true;
         inventoryItemSlots = new GameObject[player.inventorySize];
-        craftingItemSlots = new GameObject[chestSize];
+        craftingItemSlots = new GameObject[storageSize];
         int i = 0;
         foreach (Transform slotTransform in itemSlotParent.transform)
         {
@@ -169,14 +168,22 @@ public class CraftingTable : UseObject
 
         Dropdown dropdownBar = dropdown.GetComponent<Dropdown>();
         dropdownBar.ClearOptions();
-        List < Dropdown.OptionData > dropdownList = new List<Dropdown.OptionData>();
+        List<Dropdown.OptionData> dropdownList = new List<Dropdown.OptionData>();
         int i = 0;
         foreach (Item x in creatables)
         {
             dropdownList.Add(new Dropdown.OptionData(creatables[i].name));
             i++;
         }
-            dropdownBar.AddOptions(dropdownList);
+        dropdownBar.AddOptions(dropdownList);
+        if (dropdownList.Count > 0)
+        {
+            creating = creatables[chooseNum];
+        }
+        else
+        {
+            creating = null;
+        }
     }
     public void redraw()
     {
@@ -198,5 +205,37 @@ public class CraftingTable : UseObject
                 craftingItemSlots[i].transform.GetChild(0).GetComponent<Image>().sprite = FindObjectOfType<WindowHandler>().emptyImg;
             i++;
         }
+
+
+        foreach (Transform x in itemSlotParent.transform)
+        {
+            if (x.CompareTag("clearOnUse"))
+            {
+                if (creating != null)
+                {
+                    x.GetChild(0).GetComponent<Image>().sprite = creating.image;
+                }
+                else
+                {
+                    x.GetChild(0).GetComponent<Image>().sprite = FindObjectOfType<WindowHandler>().emptyImg;
+                }
+            }
+        }
+    }
+
+    public void Choose(int num)
+    {
+        chooseNum = num;
+    }
+
+    public void Create()
+    {
+        FindObjectOfType<Player>().Add(creating);
+        creating = null;
+        craftingStorage[craftingStorage.Length - 1].durability -= new System.Random().Next(5);
+        if (!craftingStorage[craftingStorage.Length - 1].CheckBreak())
+            FindObjectOfType<Player>().Add(craftingStorage[craftingStorage.Length - 1]);
+
+        craftingStorage = new Item[storageSize];
     }
 }

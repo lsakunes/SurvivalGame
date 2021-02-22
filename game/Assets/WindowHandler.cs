@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class WindowHandler : MonoBehaviour
 {
@@ -15,9 +17,11 @@ public class WindowHandler : MonoBehaviour
     {
         if (selected == null)
             selected = clicked;
-
         else
+        {
+            EventSystem.current.SetSelectedGameObject(null);
             second = clicked;
+        }
         Transform canvas = selected.transform;
         while (canvas.parent != null)
         {

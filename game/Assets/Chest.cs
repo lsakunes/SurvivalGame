@@ -38,7 +38,6 @@ public class Chest : UseObject
     override
    public void UseReady()
     {
-        Debug.Log("use subscribed");
         playerLook.ClickObject += Use;
     }
     override
@@ -47,12 +46,10 @@ public class Chest : UseObject
         playerLook.ClickObject -= Use;
         playerLook.Esc -= UnUse;
         useCanvas.SetActive(false);
-        Debug.Log("idled");
     }
     override
     public void Use()
     {
-        Debug.Log("used");
         playerLook.Esc += UnUse;
         useCanvas.SetActive(true);
         player.windowOpen = true;

@@ -72,6 +72,26 @@ public abstract class Item
 		}
 		return null;
 	}
+
+	public static Item GetItemByEnum(int num){
+		foreach (Item x in items)
+        {
+			if (num == (int)x.itemEnum)
+            {
+				return x.newObject().Create();
+            }
+        }
+		return null;
+	}
+
+	public bool CheckBreak()
+    {
+		if (durability <= 0)
+		{
+			return true;
+		}
+		else return false;
+    }
 }
 
 
