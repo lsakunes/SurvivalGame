@@ -38,8 +38,7 @@ public class CraftingTable : UseObject
     }
     public void Update()
     {
-        if (useCanvas.activeSelf)
-            updateDrop();
+        
         if (useCanvas.GetComponent<UseCanvas>().redraw)
         {
             redraw();
@@ -68,6 +67,7 @@ public class CraftingTable : UseObject
     override
     public void Use()
     {
+        updateDrop();
         playerLook.Esc += UnUse;
         useCanvas.SetActive(true);
         player.windowOpen = true;
@@ -90,16 +90,18 @@ public class CraftingTable : UseObject
 
     public void updateDrop()
     {
+        chooseNum = 0;
         int creatablesNum = 0;
         creatables = new Item[20];
         bool contin = false;
         foreach (Item x in Item.items)
         {
+            contin = false;
             if (x.ingredients.Length == 0)
                 continue;
             if ((x.creationTool == null && craftingStorage[craftingStorage.Length - 1] != null) || (x.creationTool != null && craftingStorage[craftingStorage.Length - 1] == null))
                 continue;
-            if (x.creationDevice == "craftingTable" && x.creationTool.name == craftingStorage[craftingStorage.Length - 1].name)
+            if (x.creationDevice == "craftingTable" && ((x.creationTool == null && craftingStorage[craftingStorage.Length - 1] == null) || x.creationTool.name == craftingStorage[craftingStorage.Length - 1].name))
             {
                 int[] ingredientsEnum = new int[x.ingredients.Length];
                 int[] craftingStorageEnum = new int[x.ingredients.Length];
@@ -129,7 +131,7 @@ public class CraftingTable : UseObject
                 if (contin)
                     continue;
 
-                if (z > x.ingredients.Length)
+                if (z > x.ingredients.Length || z < x.ingredients.Length)
                     continue;
 
                 Array.Sort(craftingStorageEnum);
@@ -226,16 +228,24 @@ public class CraftingTable : UseObject
     public void Choose(int num)
     {
         chooseNum = num;
+        creating = creatables[chooseNum];
     }
 
     public void Create()
     {
-        FindObjectOfType<Player>().Add(creating);
-        creating = null;
-        craftingStorage[craftingStorage.Length - 1].durability -= new System.Random().Next(5);
-        if (!craftingStorage[craftingStorage.Length - 1].CheckBreak())
-            FindObjectOfType<Player>().Add(craftingStorage[craftingStorage.Length - 1]);
+        if (creatables.Length != 0)
+        {
+            FindObjectOfType<Player>().Add(creating);
+            creating = null;
+            if (craftingStorage[craftingStorage.Length - 1] != null)
+            {
+                craftingStorage[craftingStorage.Length - 1].durability -= new System.Random().Next(5);
+                if (!craftingStorage[craftingStorage.Length - 1].CheckBreak())
+                    FindObjectOfType<Player>().Add(craftingStorage[craftingStorage.Length - 1]);
+            }
 
-        craftingStorage = new Item[storageSize];
+            craftingStorage = new Item[storageSize];
+            updateDrop();
+        }
     }
 }

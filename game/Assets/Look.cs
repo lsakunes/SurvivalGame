@@ -42,6 +42,14 @@ public class Look : MonoBehaviour
             {
                 player.Add(new SharpRock().Create());
             }
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                player.Add(new WoodStrip().Create());
+            }
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                player.Add(new WoodChunk().Create());
+            }
         }
         esced = false;
         if (Input.GetKeyDown(KeyCode.E))

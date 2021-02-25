@@ -4,10 +4,17 @@ using UnityEngine;
 
 public enum ItemTypes
 {
+	woodStrip,
 	stick,
 	rock,
 	mushroom,
-	sharpRock
+	sharpRock,
+	sharpStick,
+	mushroomOnStick,
+	spear,
+	smoothStick,
+	wood,
+	bowl
 }
 public abstract class Item
 {
@@ -22,7 +29,7 @@ public abstract class Item
 	public int hunger;
 	public ItemTypes itemEnum;
 	public static Item[] items;
-    public static int itemNum = 4;
+    public static int itemNum = 11;
 	// forward attack, downward attack, sideways 
 	public int[] attacks;
 
@@ -37,6 +44,13 @@ public abstract class Item
 		items[(int)ItemTypes.rock] = new Rock().Create();
 		items[(int)ItemTypes.mushroom] = new Mushroom().Create();
 		items[(int)ItemTypes.sharpRock] = new SharpRock().Create();
+		items[(int)ItemTypes.sharpStick] = new SharpStick().Create();
+		items[(int)ItemTypes.mushroomOnStick] = new MushroomOnStick().Create();
+		items[(int)ItemTypes.woodStrip] = new WoodStrip().Create();
+		items[(int)ItemTypes.spear] = new Spear().Create();
+		items[(int)ItemTypes.smoothStick] = new SmoothStick().Create();
+		items[(int)ItemTypes.wood] = new WoodChunk().Create();
+		items[(int)ItemTypes.bowl] = new Bowl().Create();
 
 	}
 	

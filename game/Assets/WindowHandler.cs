@@ -84,12 +84,14 @@ public class WindowHandler : MonoBehaviour
                     Item savedItem = table.craftingStorage[selected.transform.GetSiblingIndex() - player.inventorySize];
                     table.craftingStorage[selected.transform.GetSiblingIndex() - player.inventorySize] = player.inventory[second.transform.GetSiblingIndex()];
                     player.inventory[second.transform.GetSiblingIndex()] = savedItem;
+                    table.updateDrop();
                 }
                 if (second.CompareTag("craftingSlot"))
                 {
                     Item savedItem = table.craftingStorage[selected.transform.GetSiblingIndex() - player.inventorySize];
                     table.craftingStorage[selected.transform.GetSiblingIndex() - player.inventorySize] = table.craftingStorage[second.transform.GetSiblingIndex() - player.inventorySize];
                     table.craftingStorage[second.transform.GetSiblingIndex() - player.inventorySize] = savedItem;
+                    table.updateDrop();
                 }
             }
             if (selected.CompareTag("inventorySlot") && second.CompareTag("craftingSlot"))
@@ -97,6 +99,7 @@ public class WindowHandler : MonoBehaviour
                 Item savedItem = player.inventory[selected.transform.GetSiblingIndex()];
                 player.inventory[selected.transform.GetSiblingIndex()] = table.craftingStorage[second.transform.GetSiblingIndex() - player.inventorySize];
                 table.craftingStorage[second.transform.GetSiblingIndex() - player.inventorySize] = savedItem;
+                table.updateDrop();
             }
 
             if (selected.CompareTag("inventorySlot") && second.CompareTag("inventorySlot"))

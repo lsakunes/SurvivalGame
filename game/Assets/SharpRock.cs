@@ -6,7 +6,7 @@ public class SharpRock : Item
 	override
 	public Item Create()
 	{
-		name = "sharpRock";
+		name = "sharp rock";
 		ingredients = new []{new Rock().Create()};
 		creationDevice = "craftingTable";
 		creationTool = new Rock().Create();

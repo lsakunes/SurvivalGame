@@ -1,0 +1,36 @@
+Game
+
+for now all you can do is pick up items and use the 
+crafting bench and chest. normal movements, shift 
+forward to super speed, and jump to get launched to orbit
+
+e to open inventory
+
+r to cheat in a rock,
+t for stick (twig)
+p for sharpened rock
+m for mushroom
+i for wood strip
+
+to move items click on the item and click on the destination and it swaps the item positions.
+if the item is surrounded by blue it is selected. To unselect click on it again
+
+to pick up objects look at it and click it. Same for using objects such as crafting tables and chests
+
+in the crafting table there are 6 item slots from which the item is made, one use item spot (for example use a sharp rock on a stick), 
+a dropdown to pick what you are making, and an output. click on the output to creat the item. the used item and the created item will
+be added back into your inventory, and the used item will lose a bit of durability (it's not visible)
+
+if an item is used too much it might break (or at least it should i haven't tested that yet)
+
+recipes so far:
+
+sharp rock: rock used on rock
+
+sharp stick: sharp rock used on stick
+
+smooth stick: sharp rock used on stick
+
+mushroom on a stick: mushroom and stick
+
+spear: sharp rock, smooth stick, and wood fiber

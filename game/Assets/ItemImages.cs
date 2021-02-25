@@ -17,6 +17,10 @@ public class ItemImages : MonoBehaviour
     public Sprite leafImg;
     public Sprite stoneSpearImg;
     public Sprite bowlImg;
+    public Sprite sharpStickImg;
+    public Sprite mushroomOnStickImg;
+    public Sprite smoothStickImg;
+    public Sprite woodImg;
     public static ItemImages images;
     public static void createImages()
     {
